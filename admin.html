@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>uncensored.codes — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #080808; --bg2: #0e0e0e; --bg3: #141414;
+    --border: #1e1e1e; --accent: #00ff88; --accent2: #ff3366;
+    --accent3: #ffcc00; --text: #e8e8e8; --muted: #555;
+    --mono: 'Space Mono', monospace; --body: 'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--body); display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px; min-height: 100vh; background: var(--bg2);
+    border-right: 1px solid var(--border); display: flex;
+    flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0;
+  }
+  .sidebar-logo {
+    padding: 24px 20px; border-bottom: 1px solid var(--border);
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .sidebar-logo span { color: var(--muted); }
+  .sidebar-logo small { display: block; color: var(--muted); font-size: 9px; margin-top: 4px; letter-spacing: 0.1em; }
+  .nav-section { padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .nav-label { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; padding: 0 20px 8px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 20px;
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    cursor: pointer; transition: all 0.15s; border-left: 2px solid transparent;
+  }
+  .nav-item:hover, .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(0,255,136,0.03); }
+  .nav-item .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  .sidebar-bottom { margin-top: auto; padding: 16px 20px; border-top: 1px solid var(--border); }
+  .status-badge { font-family: var(--mono); font-size: 9px; color: var(--accent); letter-spacing: 0.1em; display: flex; align-items: center; gap: 6px; }
+  .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* MAIN */
+  .main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; }
+
+  /* TOPBAR */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(8,8,8,0.95); border-bottom: 1px solid var(--border);
+    padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+    backdrop-filter: blur(8px);
+  }
+  .topbar-title { font-family: var(--mono); font-size: 12px; color: var(--text); letter-spacing: 0.05em; }
+  .topbar-right { display: flex; gap: 16px; align-items: center; }
+  .topbar-time { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+  .btn-sm {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 6px 14px; border: 1px solid var(--border); color: var(--muted); background: transparent;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .btn-sm.primary:hover { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+
+  /* CONTENT */
+  .content { padding: 32px; flex: 1; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* KPI GRID */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 32px; }
+  .kpi-card { background: var(--bg2); padding: 24px; position: relative; overflow: hidden; }
+  .kpi-card::after { content: ''; position: absolute; bottom: 0; left: 0; height: 2px; background: var(--accent); width: var(--pct, 0%); }
+  .kpi-label { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; }
+  .kpi-value { font-family: var(--mono); font-size: 28px; color: var(--text); font-weight: 700; line-height: 1; }
+  .kpi-value.green { color: var(--accent); }
+  .kpi-value.red { color: var(--accent2); }
+  .kpi-value.yellow { color: var(--accent3); }
+  .kpi-delta { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 6px; }
+  .kpi-delta.up { color: var(--accent); }
+  .kpi-delta.down { color: var(--accent2); }
+
+  /* SECTION HEADER */
+  .sec-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .sec-title { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; }
+  .sec-actions { display: flex; gap: 8px; }
+
+  /* TABLE */
+  .table-wrap { border: 1px solid var(--border); overflow-x: auto; margin-bottom: 32px; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); background: var(--bg2); white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:hover { background: var(--bg2); }
+  tbody td { font-family: var(--mono); font-size: 11px; color: var(--muted); padding: 12px 16px; white-space: nowrap; }
+  tbody td.hl { color: var(--text); }
+  .badge { font-family: var(--mono); font-size: 9px; padding: 2px 8px; letter-spacing: 0.1em; display: inline-block; }
+  .badge.green { color: var(--accent); border: 1px solid rgba(0,255,136,0.3); }
+  .badge.red { color: var(--accent2); border: 1px solid rgba(255,51,102,0.3); }
+  .badge.yellow { color: var(--accent3); border: 1px solid rgba(255,204,0,0.3); }
+  .badge.blue { color: #4af; border: 1px solid rgba(68,170,255,0.3); }
+  .badge.gray { color: var(--muted); border: 1px solid var(--border); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--bg2); border: 1px solid var(--border); padding: 32px; width: 560px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
+  .modal-title { font-family: var(--mono); font-size: 14px; color: var(--accent); margin-bottom: 24px; letter-spacing: 0.05em; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group.full { grid-column: 1 / -1; }
+  .form-label { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; }
+  .form-ctrl { background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: var(--mono); font-size: 11px; padding: 10px 12px; outline: none; width: 100%; transition: border-color 0.15s; }
+  .form-ctrl:focus { border-color: var(--accent); }
+  .form-ctrl option { background: var(--bg2); }
+  .modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 24px; }
+
+  /* CHART BAR */
+  .bar-chart { display: flex; align-items: flex-end; gap: 4px; height: 80px; margin-top: 8px; }
+  .bar { flex: 1; background: rgba(0,255,136,0.15); border-top: 2px solid var(--accent); transition: background 0.2s; position: relative; cursor: default; }
+  .bar:hover { background: rgba(0,255,136,0.25); }
+  .bar-label { font-family: var(--mono); font-size: 8px; color: var(--muted); text-align: center; margin-top: 4px; }
+
+  /* CAMPAIGN CARD */
+  .campaign-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 32px; }
+  .campaign-card { background: var(--bg2); padding: 24px; }
+  .campaign-channel { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; }
+  .campaign-stat { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .campaign-stat:last-child { border: none; }
+  .campaign-stat span:last-child { color: var(--text); }
+  .funnel { display: flex; gap: 0; margin-top: 16px; overflow: hidden; border: 1px solid var(--border); }
+  .funnel-stage { flex: 1; padding: 6px 4px; text-align: center; font-family: var(--mono); font-size: 9px; color: var(--bg); letter-spacing: 0.05em; }
+
+  /* GPU INVENTORY */
+  .gpu-split { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+  @media (max-width: 900px) { .gpu-split { grid-template-columns: 1fr; } }
+
+  /* REVENUE */
+  .rev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 32px; }
+  .rev-card { background: var(--bg2); padding: 20px; }
+  .rev-label { font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .rev-val { font-family: var(--mono); font-size: 22px; color: var(--accent); font-weight: 700; }
+  .rev-sub { font-family: var(--mono); font-size: 9px; color: var(--muted); margin-top: 4px; }
+  .progress-bar { height: 3px; background: var(--border); margin-top: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); }
+
+  /* EMPTY */
+  .empty { font-family: var(--mono); font-size: 11px; color: var(--muted); padding: 40px; text-align: center; border: 1px dashed var(--border); }
+
+  /* SEARCH / FILTER */
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filter-input { background: var(--bg2); border: 1px solid var(--border); color: var(--text); font-family: var(--mono); font-size: 11px; padding: 8px 12px; outline: none; flex: 1; min-width: 200px; }
+  .filter-input:focus { border-color: var(--accent); }
+  .filter-select { background: var(--bg2); border: 1px solid var(--border); color: var(--muted); font-family: var(--mono); font-size: 11px; padding: 8px 12px; outline: none; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    uncensored<span>.codes</span>
+    <small>// admin panel v1.0</small>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <div class="nav-item active" onclick="showPage('dashboard', this)"><div class="dot"></div> Dashboard</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Acquisition</div>
+    <div class="nav-item" onclick="showPage('campaigns', this)"><div class="dot"></div> Campaigns</div>
+    <div class="nav-item" onclick="showPage('leads', this)"><div class="dot"></div> Leads</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Operations</div>
+    <div class="nav-item" onclick="showPage('customers', this)"><div class="dot"></div> Customers</div>
+    <div class="nav-item" onclick="showPage('gpu-in', this)"><div class="dot"></div> GPU Sourcing</div>
+    <div class="nav-item" onclick="showPage('gpu-out', this)"><div class="dot"></div> GPU Deployments</div>
+    <div class="nav-item" onclick="showPage('revenue', this)"><div class="dot"></div> Revenue</div>
+  </div>
+  <div class="sidebar-bottom">
+    <div class="status-badge">System Online</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="page-title">// dashboard</div>
+    <div class="topbar-right">
+      <div class="topbar-time" id="clock"></div>
+      <button class="btn-sm" onclick="exportData()">Export CSV</button>
+      <button class="btn-sm primary" onclick="openModal('lead')">+ Add Lead</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi-card" style="--pct:72%">
+          <div class="kpi-label">Total Leads</div>
+          <div class="kpi-value" id="kpi-leads">0</div>
+          <div class="kpi-delta up" id="kpi-leads-d">↑ 0 this week</div>
+        </div>
+        <div class="kpi-card" style="--pct:45%">
+          <div class="kpi-label">Converted</div>
+          <div class="kpi-value green" id="kpi-converted">0</div>
+          <div class="kpi-delta" id="kpi-conv-rate">0% conversion</div>
+        </div>
+        <div class="kpi-card" style="--pct:60%">
+          <div class="kpi-label">Active Deployments</div>
+          <div class="kpi-value yellow" id="kpi-deployments">0</div>
+          <div class="kpi-delta" id="kpi-gpus-used">0 GPUs in use</div>
+        </div>
+        <div class="kpi-card" style="--pct:38%">
+          <div class="kpi-label">GPUs Sourced</div>
+          <div class="kpi-value" id="kpi-gpus-in">0</div>
+          <div class="kpi-delta">from 4 marketplaces</div>
+        </div>
+        <div class="kpi-card" style="--pct:55%">
+          <div class="kpi-label">MRR (Est.)</div>
+          <div class="kpi-value green" id="kpi-mrr">$0</div>
+          <div class="kpi-delta up">crypto + stablecoin</div>
+        </div>
+        <div class="kpi-card" style="--pct:40%">
+          <div class="kpi-label">Gross Margin</div>
+          <div class="kpi-value yellow" id="kpi-margin">0%</div>
+          <div class="kpi-delta">buy low, sell high</div>
+        </div>
+      </div>
+
+      <div class="sec-header">
+        <div class="sec-title">// recent leads</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Handle</th><th>Channel</th><th>Use Case</th><th>Model</th><th>Status</th><th>Date</th>
+          </tr></thead>
+          <tbody id="dash-leads-tbody">
+            <tr><td colspan="6" style="text-align:center; padding:32px; font-family:var(--mono); font-size:11px; color:var(--muted);">No leads yet. Add your first lead →</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CAMPAIGNS -->
+    <div class="page" id="page-campaigns">
+      <div class="sec-header">
+        <div class="sec-title">// viral campaigns</div>
+        <div class="sec-actions">
+          <button class="btn-sm primary" onclick="openModal('campaign')">+ Add Campaign</button>
+        </div>
+      </div>
+      <div class="campaign-grid" id="campaign-grid">
+        <!-- seeded below -->
+      </div>
+      <div class="sec-header"><div class="sec-title">// all campaigns</div></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Channel</th><th>Type</th><th>Reach</th><th>Clicks</th><th>Leads</th><th>Converted</th><th>CVR</th><th>Status</th><th>Spend</th>
+          </tr></thead>
+          <tbody id="campaigns-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LEADS -->
+    <div class="page" id="page-leads">
+      <div class="sec-header">
+        <div class="sec-title">// lead pipeline</div>
+        <div class="sec-actions">
+          <button class="btn-sm primary" onclick="openModal('lead')">+ Add Lead</button>
+        </div>
+      </div>
+      <div class="filter-bar">
+        <input class="filter-input" placeholder="Search handle, email, telegram..." oninput="filterLeads(this.value)"/>
+        <select class="filter-select" onchange="filterLeadStatus(this.value)">
+          <option value="">All Status</option>
+          <option>New</option><option>Contacted</option><option>Qualified</option><option>Converted</option><option>Lost</option>
+        </select>
+        <select class="filter-select" onchange="filterLeadChannel(this.value)">
+          <option value="">All Channels</option>
+          <option>LinkedIn</option><option>Twitter/X</option><option>Reddit</option><option>Discord</option><option>HN</option><option>Referral</option><option>Direct</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>GUID</th><th>Handle</th><th>Contact</th><th>Channel</th><th>Use Case</th><th>Model Interest</th><th>Billing Pref</th><th>Status</th><th>Added</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="leads-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div class="page" id="page-customers">
+      <div class="sec-header">
+        <div class="sec-title">// active customers</div>
+        <div class="sec-actions">
+          <button class="btn-sm primary" onclick="openModal('customer')">+ Add Customer</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>GUID</th><th>Handle</th><th>Wallet</th><th>Plan</th><th>GPUs Rented</th><th>Model</th><th>MRR</th><th>Since</th><th>Status</th>
+          </tr></thead>
+          <tbody id="customers-tbody">
+            <tr><td colspan="9" style="text-align:center; padding:32px; font-family:var(--mono); font-size:11px; color:var(--muted);">No customers yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- GPU SOURCING -->
+    <div class="page" id="page-gpu-in">
+      <div class="sec-header">
+        <div class="sec-title">// GPU sourcing (rented from marketplaces)</div>
+        <div class="sec-actions">
+          <button class="btn-sm primary" onclick="openModal('gpu-in')">+ Add GPU Source</button>
+        </div>
+      </div>
+      <div class="kpi-grid" style="margin-bottom:24px;">
+        <div class="kpi-card"><div class="kpi-label">Total GPUs Sourced</div><div class="kpi-value" id="src-total">0</div></div>
+        <div class="kpi-card"><div class="kpi-label">Monthly Cost</div><div class="kpi-value red" id="src-cost">$0</div></div>
+        <div class="kpi-card"><div class="kpi-label">Avg Cost/hr</div><div class="kpi-value" id="src-hr">$0</div></div>
+        <div class="kpi-card"><div class="kpi-label">Marketplaces</div><div class="kpi-value yellow">4</div></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>ID</th><th>Marketplace</th><th>GPU Model</th><th>VRAM</th><th>Count</th><th>Cost/hr</th><th>Monthly Cost</th><th>Billing</th><th>Status</th><th>Since</th>
+          </tr></thead>
+          <tbody id="gpu-in-tbody">
+            <tr><td colspan="10" style="text-align:center; padding:32px; font-family:var(--mono); font-size:11px; color:var(--muted);">No GPU sources yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- GPU DEPLOYMENTS -->
+    <div class="page" id="page-gpu-out">
+      <div class="sec-header">
+        <div class="sec-title">// GPU deployments (leased to customers)</div>
+        <div class="sec-actions">
+          <button class="btn-sm primary" onclick="openModal('gpu-out')">+ Add Deployment</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Deploy ID</th><th>Customer GUID</th><th>GPU Model</th><th>Model Deployed</th><th>Plan</th><th>Price/hr</th><th>Monthly Rev</th><th>Margin</th><th>Status</th><th>Since</th>
+          </tr></thead>
+          <tbody id="gpu-out-tbody">
+            <tr><td colspan="10" style="text-align:center; padding:32px; font-family:var(--mono); font-size:11px; color:var(--muted);">No deployments yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- REVENUE -->
+    <div class="page" id="page-revenue">
+      <div class="sec-title" style="margin-bottom:24px;">// revenue & margins</div>
+      <div class="rev-grid" id="rev-summary">
+        <div class="rev-card"><div class="rev-label">Total Revenue (MTD)</div><div class="rev-val" id="rev-total">$0</div><div class="rev-sub">all deployments</div><div class="progress-bar"><div class="progress-fill" style="width:0%" id="rev-bar"></div></div></div>
+        <div class="rev-card"><div class="rev-label">Total Costs (MTD)</div><div class="rev-val" style="color:var(--accent2)" id="rev-costs">$0</div><div class="rev-sub">GPU sourcing</div></div>
+        <div class="rev-card"><div class="rev-label">Gross Profit</div><div class="rev-val" id="rev-profit">$0</div><div class="rev-sub">revenue minus costs</div></div>
+        <div class="rev-card"><div class="rev-label">Gross Margin</div><div class="rev-val yellow" id="rev-margin-pct">0%</div><div class="rev-sub">target: 30%+</div></div>
+      </div>
+      <div class="sec-title" style="margin-bottom:16px;">// per-customer revenue</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Customer GUID</th><th>Plan</th><th>GPU Count</th><th>Revenue/mo</th><th>Cost/mo</th><th>Margin</th><th>Margin %</th><th>Crypto</th>
+          </tr></thead>
+          <tbody id="rev-tbody">
+            <tr><td colspan="8" style="text-align:center; padding:32px; font-family:var(--mono); font-size:11px; color:var(--muted);">No revenue data yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-title" id="modal-title">Add Entry</div>
+    <div id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn-sm" onclick="closeModalDirect()">Cancel</button>
+      <button class="btn-sm primary" onclick="saveModal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────
+const DB = {
+  leads: JSON.parse(localStorage.getItem('uc_leads') || '[]'),
+  campaigns: JSON.parse(localStorage.getItem('uc_campaigns') || '[]'),
+  customers: JSON.parse(localStorage.getItem('uc_customers') || '[]'),
+  gpuIn: JSON.parse(localStorage.getItem('uc_gpuIn') || '[]'),
+  gpuOut: JSON.parse(localStorage.getItem('uc_gpuOut') || '[]'),
+};
+
+function save() {
+  localStorage.setItem('uc_leads', JSON.stringify(DB.leads));
+  localStorage.setItem('uc_campaigns', JSON.stringify(DB.campaigns));
+  localStorage.setItem('uc_customers', JSON.stringify(DB.customers));
+  localStorage.setItem('uc_gpuIn', JSON.stringify(DB.gpuIn));
+  localStorage.setItem('uc_gpuOut', JSON.stringify(DB.gpuOut));
+}
+
+function guid() { return 'UC-' + Math.random().toString(36).substr(2,8).toUpperCase(); }
+
+// ── CLOCK ─────────────────────────────────────────────────────
+function updateClock() {
+  document.getElementById('clock').textContent = new Date().toISOString().replace('T',' ').substr(0,19) + ' UTC';
+}
+setInterval(updateClock, 1000); updateClock();
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('page-title').textContent = '// ' + id.replace('-', ' ');
+  render();
+}
+
+// ── RENDER ────────────────────────────────────────────────────
+function render() {
+  renderDashboard();
+  renderLeads();
+  renderCampaigns();
+  renderCustomers();
+  renderGpuIn();
+  renderGpuOut();
+  renderRevenue();
+}
+
+function statusBadge(s) {
+  const map = { New:'blue', Contacted:'yellow', Qualified:'yellow', Converted:'green', Lost:'red', Active:'green', Inactive:'gray', Paused:'yellow', Running:'green', Stopped:'red' };
+  return `<span class="badge ${map[s]||'gray'}">${s}</span>`;
+}
+
+function renderDashboard() {
+  const converted = DB.leads.filter(l => l.status === 'Converted').length;
+  const convRate = DB.leads.length ? Math.round(converted/DB.leads.length*100) : 0;
+  const activeDeployments = DB.gpuOut.filter(g => g.status === 'Running').length;
+  const totalGpusIn = DB.gpuIn.reduce((a,g) => a + Number(g.count||0), 0);
+  const mrr = DB.gpuOut.filter(g=>g.status==='Running').reduce((a,g)=>a+Number(g.monthlyRev||0),0);
+  const costs = DB.gpuIn.reduce((a,g)=>a+Number(g.monthlyCost||0),0);
+  const margin = mrr ? Math.round((mrr-costs)/mrr*100) : 0;
+
+  document.getElementById('kpi-leads').textContent = DB.leads.length;
+  document.getElementById('kpi-converted').textContent = converted;
+  document.getElementById('kpi-conv-rate').textContent = convRate + '% conversion';
+  document.getElementById('kpi-deployments').textContent = activeDeployments;
+  document.getElementById('kpi-gpus-used').textContent = activeDeployments + ' GPUs in use';
+  document.getElementById('kpi-gpus-in').textContent = totalGpusIn;
+  document.getElementById('kpi-mrr').textContent = '$' + mrr.toLocaleString();
+  document.getElementById('kpi-margin').textContent = margin + '%';
+
+  const tbody = document.getElementById('dash-leads-tbody');
+  if (!DB.leads.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;font-family:var(--mono);font-size:11px;color:var(--muted)">No leads yet. Add your first lead →</td></tr>';
+    return;
+  }
+  tbody.innerHTML = DB.leads.slice(-10).reverse().map(l => `
+    <tr>
+      <td class="hl">${l.handle}</td>
+      <td>${l.channel}</td>
+      <td>${l.useCase}</td>
+      <td>${l.model}</td>
+      <td>${statusBadge(l.status)}</td>
+      <td>${l.date}</td>
+    </tr>`).join('');
+}
+
+function renderLeads(filter='', statusF='', channelF='') {
+  let data = DB.leads;
+  if (filter) data = data.filter(l => (l.handle+l.email+l.telegram).toLowerCase().includes(filter.toLowerCase()));
+  if (statusF) data = data.filter(l => l.status === statusF);
+  if (channelF) data = data.filter(l => l.channel === channelF);
+  const tbody = document.getElementById('leads-tbody');
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;font-family:var(--mono);font-size:11px;color:var(--muted)">No leads found.</td></tr>'; return; }
+  tbody.innerHTML = data.map((l,i) => `
+    <tr>
+      <td style="font-size:9px;color:var(--muted)">${l.guid}</td>
+      <td class="hl">${l.handle}</td>
+      <td>${l.email||l.telegram||'—'}</td>
+      <td>${l.channel}</td>
+      <td>${l.useCase}</td>
+      <td>${l.model}</td>
+      <td>${l.billing}</td>
+      <td>${statusBadge(l.status)}</td>
+      <td>${l.date}</td>
+      <td>
+        <button class="btn-sm" onclick="convertLead(${DB.leads.indexOf(l)})">Convert</button>
+        <button class="btn-sm" onclick="deleteLead(${DB.leads.indexOf(l)})" style="color:var(--accent2);border-color:var(--accent2)">Del</button>
+      </td>
+    </tr>`).join('');
+}
+
+function filterLeads(v) { renderLeads(v); }
+function filterLeadStatus(v) { renderLeads('', v); }
+function filterLeadChannel(v) { renderLeads('', '', v); }
+
+function convertLead(i) {
+  DB.leads[i].status = 'Converted';
+  save(); render();
+}
+function deleteLead(i) {
+  if (confirm('Delete lead?')) { DB.leads.splice(i, 1); save(); render(); }
+}
+
+function renderCampaigns() {
+  // Seed default channels if empty
+  const channels = ['LinkedIn','Twitter/X','Reddit (r/LocalLLaMA)','Discord (AI servers)','Hacker News','Referral'];
+  const grid = document.getElementById('campaign-grid');
+  grid.innerHTML = channels.map(ch => {
+    const camp = DB.campaigns.filter(c => c.channel === ch);
+    const reach = camp.reduce((a,c)=>a+Number(c.reach||0),0);
+    const clicks = camp.reduce((a,c)=>a+Number(c.clicks||0),0);
+    const leads = camp.reduce((a,c)=>a+Number(c.leads||0),0);
+    const conv = camp.reduce((a,c)=>a+Number(c.converted||0),0);
+    const cvr = leads ? Math.round(conv/leads*100) : 0;
+    return `<div class="campaign-card">
+      <div class="campaign-channel">${ch}</div>
+      <div class="campaign-stat"><span>Reach</span><span>${reach.toLocaleString()}</span></div>
+      <div class="campaign-stat"><span>Clicks</span><span>${clicks.toLocaleString()}</span></div>
+      <div class="campaign-stat"><span>Leads</span><span>${leads}</span></div>
+      <div class="campaign-stat"><span>Converted</span><span>${conv}</span></div>
+      <div class="campaign-stat"><span>CVR</span><span>${cvr}%</span></div>
+      <div class="funnel">
+        <div class="funnel-stage" style="background:rgba(0,255,136,0.7)">Reach</div>
+        <div class="funnel-stage" style="background:rgba(0,255,136,0.5)">Click</div>
+        <div class="funnel-stage" style="background:rgba(0,255,136,0.35)">Lead</div>
+        <div class="funnel-stage" style="background:rgba(0,255,136,0.2)">Conv</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const tbody = document.getElementById('campaigns-tbody');
+  if (!DB.campaigns.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:24px;font-family:var(--mono);font-size:11px;color:var(--muted)">No campaigns recorded yet.</td></tr>'; return; }
+  tbody.innerHTML = DB.campaigns.map(c => {
+    const cvr = c.leads ? Math.round(c.converted/c.leads*100) : 0;
+    return `<tr>
+      <td class="hl">${c.channel}</td>
+      <td>${c.type}</td>
+      <td>${Number(c.reach).toLocaleString()}</td>
+      <td>${Number(c.clicks).toLocaleString()}</td>
+      <td>${c.leads}</td>
+      <td>${c.converted}</td>
+      <td>${cvr}%</td>
+      <td>${statusBadge(c.status)}</td>
+      <td>${c.spend ? '$'+c.spend : '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderCustomers() {
+  const tbody = document.getElementById('customers-tbody');
+  if (!DB.customers.length) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;font-family:var(--mono);font-size:11px;color:var(--muted)">No customers yet.</td></tr>'; return; }
+  tbody.innerHTML = DB.customers.map(c => `
+    <tr>
+      <td style="font-size:9px;color:var(--muted)">${c.guid}</td>
+      <td class="hl">${c.handle}</td>
+      <td style="font-size:9px">${c.wallet||'—'}</td>
+      <td>${c.plan}</td>
+      <td>${c.gpuCount}</td>
+      <td>${c.model}</td>
+      <td style="color:var(--accent)">$${Number(c.mrr).toLocaleString()}</td>
+      <td>${c.since}</td>
+      <td>${statusBadge(c.status)}</td>
+    </tr>`).join('');
+}
+
+function renderGpuIn() {
+  const tbody = document.getElementById('gpu-in-tbody');
+  const total = DB.gpuIn.reduce((a,g)=>a+Number(g.count||0),0);
+  const cost = DB.gpuIn.reduce((a,g)=>a+Number(g.monthlyCost||0),0);
+  const hrCost = DB.gpuIn.reduce((a,g)=>a+Number(g.costHr||0)*Number(g.count||0),0);
+  document.getElementById('src-total').textContent = total;
+  document.getElementById('src-cost').textContent = '$' + cost.toLocaleString();
+  document.getElementById('src-hr').textContent = '$' + hrCost.toFixed(2);
+  if (!DB.gpuIn.length) { tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;font-family:var(--mono);font-size:11px;color:var(--muted)">No GPU sources yet.</td></tr>'; return; }
+  tbody.innerHTML = DB.gpuIn.map((g,i) => `
+    <tr>
+      <td style="font-size:9px;color:var(--muted)">SRC-${String(i+1).padStart(3,'0')}</td>
+      <td class="hl">${g.marketplace}</td>
+      <td>${g.gpuModel}</td>
+      <td>${g.vram}GB</td>
+      <td>${g.count}</td>
+      <td>$${Number(g.costHr).toFixed(2)}/hr</td>
+      <td style="color:var(--accent2)">$${Number(g.monthlyCost).toLocaleString()}</td>
+      <td>${g.billing}</td>
+      <td>${statusBadge(g.status)}</td>
+      <td>${g.since}</td>
+    </tr>`).join('');
+}
+
+function renderGpuOut() {
+  const tbody = document.getElementById('gpu-out-tbody');
+  if (!DB.gpuOut.length) { tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;font-family:var(--mono);font-size:11px;color:var(--muted)">No deployments yet.</td></tr>'; return; }
+  tbody.innerHTML = DB.gpuOut.map((g,i) => {
+    const margin = g.monthlyCost ? Math.round((g.monthlyRev - g.monthlyCost)/g.monthlyRev*100) : '—';
+    return `<tr>
+      <td style="font-size:9px;color:var(--muted)">DEP-${String(i+1).padStart(3,'0')}</td>
+      <td style="font-size:9px">${g.customerGuid}</td>
+      <td>${g.gpuModel}</td>
+      <td>${g.modelDeployed}</td>
+      <td>${g.plan}</td>
+      <td>$${Number(g.priceHr).toFixed(2)}/hr</td>
+      <td style="color:var(--accent)">$${Number(g.monthlyRev).toLocaleString()}</td>
+      <td>${margin}%</td>
+      <td>${statusBadge(g.status)}</td>
+      <td>${g.since}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderRevenue() {
+  const totalRev = DB.gpuOut.filter(g=>g.status==='Running').reduce((a,g)=>a+Number(g.monthlyRev||0),0);
+  const totalCost = DB.gpuIn.reduce((a,g)=>a+Number(g.monthlyCost||0),0);
+  const profit = totalRev - totalCost;
+  const marginPct = totalRev ? Math.round(profit/totalRev*100) : 0;
+  document.getElementById('rev-total').textContent = '$' + totalRev.toLocaleString();
+  document.getElementById('rev-costs').textContent = '$' + totalCost.toLocaleString();
+  document.getElementById('rev-profit').textContent = '$' + profit.toLocaleString();
+  document.getElementById('rev-margin-pct').textContent = marginPct + '%';
+
+  const tbody = document.getElementById('rev-tbody');
+  if (!DB.customers.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:32px;font-family:var(--mono);font-size:11px;color:var(--muted)">No revenue data.</td></tr>'; return; }
+  tbody.innerHTML = DB.customers.map(c => {
+    const deps = DB.gpuOut.filter(g => g.customerGuid === c.guid && g.status === 'Running');
+    const rev = deps.reduce((a,g)=>a+Number(g.monthlyRev||0),0);
+    const cost = deps.reduce((a,g)=>a+Number(g.monthlyCost||0),0);
+    const m = rev ? Math.round((rev-cost)/rev*100) : 0;
+    return `<tr>
+      <td style="font-size:9px;color:var(--muted)">${c.guid}</td>
+      <td>${c.plan}</td>
+      <td>${c.gpuCount}</td>
+      <td style="color:var(--accent)">$${rev.toLocaleString()}</td>
+      <td style="color:var(--accent2)">$${cost.toLocaleString()}</td>
+      <td>$${(rev-cost).toLocaleString()}</td>
+      <td>${m}%</td>
+      <td>${c.crypto||'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── MODALS ────────────────────────────────────────────────────
+let currentModal = '';
+
+const MODAL_FORMS = {
+  lead: {
+    title: '// add lead',
+    fields: [
+      {name:'handle', label:'Handle / Name', type:'text', placeholder:'@username or Name', required:true},
+      {name:'email', label:'Email (optional)', type:'email', placeholder:'email@...'},
+      {name:'telegram', label:'Telegram / Discord', type:'text', placeholder:'@handle'},
+      {name:'channel', label:'Source Channel', type:'select', options:['LinkedIn','Twitter/X','Reddit','Discord','Hacker News','Referral','Direct','Other']},
+      {name:'useCase', label:'Use Case', type:'select', options:['Research / Academia','AI Agent Development','Creative / Roleplay','Enterprise / Production','Personal / Exploration','Other']},
+      {name:'model', label:'Model Interest', type:'select', options:['LLaMA 4 Scout','Abliterated v2','Dolphin Mixtral 2.9','Dolphin Mixtral 2.7','Custom Deploy','Dedicated Node (H100)','Undecided']},
+      {name:'billing', label:'Billing Preference', type:'select', options:['Hourly','Monthly','Quarterly','Annual','Undecided']},
+      {name:'status', label:'Status', type:'select', options:['New','Contacted','Qualified','Converted','Lost']},
+      {name:'notes', label:'Notes', type:'textarea', full:true},
+    ]
+  },
+  campaign: {
+    title: '// add campaign',
+    fields: [
+      {name:'channel', label:'Channel', type:'select', options:['LinkedIn','Twitter/X','Reddit (r/LocalLLaMA)','Reddit (r/MachineLearning)','Discord (AI servers)','Discord (EleutherAI)','Discord (Nous Research)','Hacker News','Referral','Other']},
+      {name:'type', label:'Campaign Type', type:'select', options:['Organic Post','Thread / Article','Community Post','DM Outreach','Referral Program','Show HN']},
+      {name:'reach', label:'Reach / Impressions', type:'number', placeholder:'0'},
+      {name:'clicks', label:'Clicks / Profile Views', type:'number', placeholder:'0'},
+      {name:'leads', label:'Leads Generated', type:'number', placeholder:'0'},
+      {name:'converted', label:'Converted', type:'number', placeholder:'0'},
+      {name:'spend', label:'Spend (USD, 0 if organic)', type:'number', placeholder:'0'},
+      {name:'status', label:'Status', type:'select', options:['Running','Paused','Stopped']},
+      {name:'notes', label:'Notes / Link', type:'textarea', full:true},
+    ]
+  },
+  customer: {
+    title: '// add customer',
+    fields: [
+      {name:'handle', label:'Handle / Name', type:'text', required:true},
+      {name:'wallet', label:'Wallet Address', type:'text', placeholder:'SOL/ETH address'},
+      {name:'crypto', label:'Payment Crypto', type:'select', options:['SOL','USDC','USDT','ETH','BTC','XMR','TIMER']},
+      {name:'plan', label:'Plan', type:'select', options:['Hourly','Monthly','Quarterly','Annual']},
+      {name:'gpuCount', label:'GPU Count', type:'number', placeholder:'1'},
+      {name:'model', label:'Model Deployed', type:'select', options:['LLaMA 4 Scout','Abliterated v2','Dolphin Mixtral 2.9','Dolphin Mixtral 2.7','Custom','Dedicated Node']},
+      {name:'mrr', label:'MRR (USD)', type:'number', placeholder:'0'},
+      {name:'status', label:'Status', type:'select', options:['Active','Inactive','Paused']},
+    ]
+  },
+  'gpu-in': {
+    title: '// add GPU source',
+    fields: [
+      {name:'marketplace', label:'Marketplace', type:'select', options:['Vast.ai','io.net','Akash Network','Aethir','RunPod','TensorDock','Other']},
+      {name:'gpuModel', label:'GPU Model', type:'select', options:['H100 80GB SXM','H100 80GB PCIe','A100 80GB','A100 40GB','RTX 4090 24GB','RTX 3090 24GB','L40S 48GB','Other']},
+      {name:'vram', label:'VRAM (GB)', type:'number', placeholder:'24'},
+      {name:'count', label:'Count', type:'number', placeholder:'1'},
+      {name:'costHr', label:'Cost per GPU/hr (USD)', type:'number', placeholder:'0.49'},
+      {name:'monthlyCost', label:'Monthly Cost (USD)', type:'number', placeholder:'0'},
+      {name:'billing', label:'Billing Cycle', type:'select', options:['Hourly','Monthly','Quarterly']},
+      {name:'status', label:'Status', type:'select', options:['Running','Paused','Stopped']},
+    ]
+  },
+  'gpu-out': {
+    title: '// add deployment',
+    fields: [
+      {name:'customerGuid', label:'Customer GUID', type:'text', placeholder:'UC-XXXXXXXX'},
+      {name:'gpuModel', label:'GPU Model', type:'select', options:['H100 80GB SXM','A100 80GB','A100 40GB','RTX 4090 24GB','RTX 3090 24GB']},
+      {name:'modelDeployed', label:'AI Model', type:'select', options:['LLaMA 4 Scout','Abliterated v2','Dolphin Mixtral 2.9','Dolphin Mixtral 2.7','Custom','Multiple']},
+      {name:'plan', label:'Plan', type:'select', options:['Hourly','Monthly','Quarterly','Annual']},
+      {name:'priceHr', label:'Price/hr (USD)', type:'number', placeholder:'0.99'},
+      {name:'monthlyRev', label:'Monthly Revenue (USD)', type:'number', placeholder:'0'},
+      {name:'monthlyCost', label:'Monthly Cost (USD)', type:'number', placeholder:'0'},
+      {name:'status', label:'Status', type:'select', options:['Running','Paused','Stopped']},
+    ]
+  }
+};
+
+function openModal(type) {
+  currentModal = type;
+  const form = MODAL_FORMS[type];
+  document.getElementById('modal-title').textContent = form.title;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-grid">
+      ${form.fields.map(f => `
+        <div class="form-group ${f.full?'full':''}">
+          <div class="form-label">${f.label}</div>
+          ${f.type === 'select'
+            ? `<select class="form-ctrl" name="${f.name}"><option value="">— select —</option>${f.options.map(o=>`<option>${o}</option>`).join('')}</select>`
+            : f.type === 'textarea'
+            ? `<textarea class="form-ctrl" name="${f.name}" rows="3" placeholder="${f.placeholder||''}"></textarea>`
+            : `<input class="form-ctrl" type="${f.type}" name="${f.name}" placeholder="${f.placeholder||''}" ${f.required?'required':''}/>`
+          }
+        </div>`).join('')}
+    </div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(e) { if (e.target.id === 'modal-overlay') closeModalDirect(); }
+function closeModalDirect() { document.getElementById('modal-overlay').classList.remove('open'); }
+
+function saveModal() {
+  const form = document.getElementById('modal-body');
+  const inputs = form.querySelectorAll('[name]');
+  const data = {};
+  inputs.forEach(i => data[i.name] = i.value);
+  data.date = new Date().toISOString().substr(0,10);
+
+  if (currentModal === 'lead') {
+    data.guid = guid();
+    if (!data.handle) { alert('Handle required'); return; }
+    DB.leads.push(data);
+  } else if (currentModal === 'campaign') {
+    DB.campaigns.push(data);
+  } else if (currentModal === 'customer') {
+    data.guid = guid();
+    DB.customers.push(data);
+    data.since = data.date;
+  } else if (currentModal === 'gpu-in') {
+    data.since = data.date;
+    DB.gpuIn.push(data);
+  } else if (currentModal === 'gpu-out') {
+    data.since = data.date;
+    DB.gpuOut.push(data);
+  }
+
+  save(); closeModalDirect(); render();
+}
+
+// ── EXPORT ────────────────────────────────────────────────────
+function exportData() {
+  const data = { leads: DB.leads, campaigns: DB.campaigns, customers: DB.customers, gpuIn: DB.gpuIn, gpuOut: DB.gpuOut };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'uncensored-codes-admin-' + new Date().toISOString().substr(0,10) + '.json';
+  a.click();
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>uncensored.codes — Raw AI. No Filters. No Logs.</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #080808;
+    --bg2: #0e0e0e;
+    --bg3: #141414;
+    --border: #1e1e1e;
+    --accent: #00ff88;
+    --accent2: #ff3366;
+    --accent3: #ffcc00;
+    --text: #e8e8e8;
+    --muted: #666;
+    --mono: 'Space Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --body: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.15s ease;
+    mix-blend-mode: difference;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* Scanlines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(8,8,8,0.9);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-logo span { color: var(--muted); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 8px 20px;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .nav-cta:hover { background: var(--accent2); color: #fff; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 20s linear infinite;
+  }
+
+  @keyframes gridMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .blink {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--accent);
+    animation: blink 1s step-end infinite;
+    margin-left: 4px;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .hero h1 {
+    font-family: var(--display);
+    font-size: clamp(72px, 12vw, 160px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 .red { color: var(--accent2); }
+  .hero h1 .green { color: var(--accent); }
+
+  .hero-sub {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 560px;
+    margin-top: 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-sub strong { color: var(--text); }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 48px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 16px 32px;
+    text-decoration: none;
+    border: none;
+    cursor: none;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent2);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+
+  .btn-secondary {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: transparent;
+    padding: 16px 32px;
+    text-decoration: none;
+    border: 1px solid var(--accent);
+    cursor: none;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(0,255,136,0.05);
+  }
+
+  /* TICKER */
+  .ticker {
+    background: var(--accent);
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .ticker-inner {
+    display: inline-flex;
+    animation: ticker 30s linear infinite;
+  }
+
+  .ticker-item {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--bg);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0 40px;
+  }
+
+  .ticker-item::after {
+    content: '///';
+    margin-left: 40px;
+    opacity: 0.4;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* MODELS */
+  .section {
+    padding: 100px 40px;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .models-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .model-card {
+    background: var(--bg2);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+    cursor: none;
+  }
+
+  .model-card:hover { background: var(--bg3); }
+
+  .model-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--accent);
+    transition: height 0.3s ease;
+  }
+
+  .model-card:hover::before { height: 100%; }
+
+  .model-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 3px 8px;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .model-badge.red { background: var(--accent2); }
+  .model-badge.yellow { background: var(--accent3); color: var(--bg); }
+
+  .model-name {
+    font-family: var(--display);
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .model-desc {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .model-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .spec {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
+  }
+
+  .spec-val { color: var(--accent); }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .price-card {
+    background: var(--bg2);
+    padding: 40px 32px;
+    position: relative;
+    cursor: none;
+    transition: background 0.2s;
+  }
+
+  .price-card.featured {
+    background: var(--bg3);
+    border: 1px solid var(--accent);
+    margin: -1px;
+    z-index: 1;
+  }
+
+  .price-card:hover { background: var(--bg3); }
+
+  .price-tier {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .price-featured-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 2px 8px;
+    letter-spacing: 0.1em;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .price-amount {
+    font-family: var(--display);
+    font-size: 56px;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .price-amount sup {
+    font-family: var(--mono);
+    font-size: 18px;
+    vertical-align: super;
+  }
+
+  .price-period {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .price-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .price-features li {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .price-features li::before {
+    content: '→';
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .price-btn {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    padding: 12px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: all 0.2s;
+    cursor: none;
+  }
+
+  .price-btn:hover, .price-card.featured .price-btn {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,255,136,0.05);
+  }
+
+  /* CRYPTO PAYMENT */
+  .crypto-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .crypto-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+    cursor: none;
+  }
+
+  .crypto-badge:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* WAITLIST */
+  .waitlist-section {
+    padding: 100px 40px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .waitlist-inner {
+    max-width: 640px;
+  }
+
+  .waitlist-title {
+    font-family: var(--display);
+    font-size: clamp(48px, 8vw, 96px);
+    line-height: 0.9;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .waitlist-title span { color: var(--accent); }
+
+  .waitlist-sub {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+
+  .waitlist-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 12px;
+  }
+
+  .form-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    cursor: none;
+  }
+
+  .form-input:focus { border-color: var(--accent); }
+  .form-input::placeholder { color: var(--muted); }
+
+  .form-select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    cursor: none;
+    appearance: none;
+  }
+
+  .form-select:focus { border-color: var(--accent); }
+
+  .form-submit {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    padding: 16px 32px;
+    cursor: none;
+    transition: background 0.2s;
+    align-self: flex-start;
+  }
+
+  .form-submit:hover { background: var(--accent2); color: #fff; }
+
+  /* TRUST */
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  .trust-item {
+    background: var(--bg2);
+    padding: 32px;
+    text-align: center;
+  }
+
+  .trust-num {
+    font-family: var(--display);
+    font-size: 56px;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .trust-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 60px 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 24px;
+  }
+
+  .footer-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .footer-logo span { color: var(--muted); }
+
+  .footer-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* GLITCH */
+  .glitch {
+    position: relative;
+  }
+
+  .glitch::before, .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch::before {
+    color: var(--accent2);
+    animation: glitch1 4s infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+  }
+
+  .glitch::after {
+    color: var(--accent);
+    animation: glitch2 4s infinite;
+    clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+  }
+
+  @keyframes glitch1 {
+    0%,94%,100%{transform:translate(0)}
+    95%{transform:translate(-3px,1px)}
+    97%{transform:translate(3px,-1px)}
+  }
+
+  @keyframes glitch2 {
+    0%,94%,100%{transform:translate(0)}
+    96%{transform:translate(3px,1px)}
+    98%{transform:translate(-3px,-1px)}
+  }
+
+  /* Terminal line */
+  .terminal-line {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .terminal-line::before {
+    content: '$';
+    color: var(--accent);
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 20px 60px; }
+    .section { padding: 60px 20px; }
+    .waitlist-section { padding: 60px 20px; }
+    footer { padding: 40px 20px; flex-direction: column; align-items: flex-start; }
+    .form-row { flex-direction: column; }
+    .hero-actions { flex-direction: column; }
+    .btn-primary, .btn-secondary { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">uncensored<span>.codes</span></div>
+  <ul class="nav-links">
+    <li><a href="#models">Models</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#payment">Pay Crypto</a></li>
+    <li><a href="#waitlist">Early Access</a></li>
+  </ul>
+  <a href="#waitlist" class="nav-cta">Deploy Now</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-tag">GPU-as-a-Service <span class="blink"></span></div>
+  <h1 class="glitch" data-text="RUN UNCENSORED AI">
+    RUN<br/><span class="red">UNCENSORED</span><br/><span class="green">AI</span>
+  </h1>
+  <p class="hero-sub">
+    <strong>Run Uncensored Unbiased AI Inference 24×7</strong><br/>
+    No filters. No guardrails. No logs.<br/>
+    LLaMA 4 Scout · Abliterated v2 · Dolphin Mixtral · and more.<br/>
+    Pay with your favorite cryptocurrency or stablecoin.
+  </p>
+  <div class="terminal-line">inference ready in &lt; 60 seconds after booking</div>
+  <div class="hero-actions">
+    <a href="#waitlist" class="btn-primary"><span>→ Book a GPU Now</span></a>
+    <a href="#models" class="btn-secondary">View Models</a>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">Zero Censorship</span>
+    <span class="ticker-item">No KYC Required</span>
+    <span class="ticker-item">Pay in Crypto</span>
+    <span class="ticker-item">LLaMA 4 Scout</span>
+    <span class="ticker-item">Dolphin Mixtral</span>
+    <span class="ticker-item">Abliterated v2</span>
+    <span class="ticker-item">99.9% Uptime</span>
+    <span class="ticker-item">Hourly Billing</span>
+    <span class="ticker-item">Zero Censorship</span>
+    <span class="ticker-item">No KYC Required</span>
+    <span class="ticker-item">Pay in Crypto</span>
+    <span class="ticker-item">LLaMA 4 Scout</span>
+    <span class="ticker-item">Dolphin Mixtral</span>
+    <span class="ticker-item">Abliterated v2</span>
+    <span class="ticker-item">99.9% Uptime</span>
+    <span class="ticker-item">Hourly Billing</span>
+  </div>
+</div>
+
+<!-- MODELS -->
+<section class="section" id="models">
+  <div class="section-label">// available models</div>
+  <div class="models-grid">
+    <div class="model-card fade-up">
+      <div class="model-badge">New</div>
+      <div class="model-name">LLaMA 4 Scout</div>
+      <div class="model-desc">Meta's latest frontier model. Full capability, zero content filtering. Ideal for research, creative writing, and unrestricted reasoning tasks.</div>
+      <div class="model-specs">
+        <div class="spec"><span>Context</span><span class="spec-val">128K tokens</span></div>
+        <div class="spec"><span>Params</span><span class="spec-val">17B active / 109B total</span></div>
+        <div class="spec"><span>Quantization</span><span class="spec-val">Q4_K_M / FP16</span></div>
+        <div class="spec"><span>API</span><span class="spec-val">OpenAI-compatible</span></div>
+      </div>
+    </div>
+    <div class="model-card fade-up">
+      <div class="model-badge red">Uncensored</div>
+      <div class="model-name">Abliterated v2</div>
+      <div class="model-desc">Refusal-abliterated LLaMA variant. All safety vectors surgically removed. Raw model capability with zero behavioral constraints.</div>
+      <div class="model-specs">
+        <div class="spec"><span>Context</span><span class="spec-val">32K tokens</span></div>
+        <div class="spec"><span>Params</span><span class="spec-val">70B</span></div>
+        <div class="spec"><span>Quantization</span><span class="spec-val">Q4_K_M</span></div>
+        <div class="spec"><span>API</span><span class="spec-val">OpenAI-compatible</span></div>
+      </div>
+    </div>
+    <div class="model-card fade-up">
+      <div class="model-badge yellow">Popular</div>
+      <div class="model-name">Dolphin Mixtral</div>
+      <div class="model-desc">Eric Hartford's uncensored fine-tune on Mixtral MoE. Developer favorite for agentic workflows, coding, and unrestricted instruction following.</div>
+      <div class="model-specs">
+        <div class="spec"><span>Context</span><span class="spec-val">32K tokens</span></div>
+        <div class="spec"><span>Params</span><span class="spec-val">8×7B MoE</span></div>
+        <div class="spec"><span>Quantization</span><span class="spec-val">Q5_K_M / Q8</span></div>
+        <div class="spec"><span>API</span><span class="spec-val">OpenAI-compatible</span></div>
+      </div>
+    </div>
+    <div class="model-card fade-up">
+      <div class="model-badge">4 Variants</div>
+      <div class="model-name">Dolphin Mixtral +</div>
+      <div class="model-desc">Full suite: Dolphin-2.5, Dolphin-2.6, Dolphin-2.7, and Dolphin-2.9. Choose by task type — coding, roleplay, analysis, or long-context reasoning.</div>
+      <div class="model-specs">
+        <div class="spec"><span>Variants</span><span class="spec-val">2.5 / 2.6 / 2.7 / 2.9</span></div>
+        <div class="spec"><span>Base</span><span class="spec-val">Mixtral 8×7B</span></div>
+        <div class="spec"><span>Quantization</span><span class="spec-val">Q4 → Q8</span></div>
+        <div class="spec"><span>API</span><span class="spec-val">OpenAI-compatible</span></div>
+      </div>
+    </div>
+    <div class="model-card fade-up">
+      <div class="model-badge">Coming Soon</div>
+      <div class="model-name">Custom Deploy</div>
+      <div class="model-desc">Bring your own model. Upload any GGUF or HuggingFace-compatible weights. We provision the GPU, you control everything else.</div>
+      <div class="model-specs">
+        <div class="spec"><span>Format</span><span class="spec-val">GGUF / HF / ONNX</span></div>
+        <div class="spec"><span>GPU</span><span class="spec-val">A100 / H100 / RTX 4090</span></div>
+        <div class="spec"><span>Setup time</span><span class="spec-val">&lt; 10 min</span></div>
+        <div class="spec"><span>Support</span><span class="spec-val">24/7</span></div>
+      </div>
+    </div>
+    <div class="model-card fade-up">
+      <div class="model-badge red">Enterprise</div>
+      <div class="model-name">Dedicated Node</div>
+      <div class="model-desc">Isolated GPU node, exclusively yours. No shared inference. No neighbors. Maximum throughput with guaranteed VRAM and zero cold starts.</div>
+      <div class="model-specs">
+        <div class="spec"><span>GPU</span><span class="spec-val">H100 80GB SXM</span></div>
+        <div class="spec"><span>VRAM</span><span class="spec-val">80GB dedicated</span></div>
+        <div class="spec"><span>Billing</span><span class="spec-val">Monthly / Quarterly</span></div>
+        <div class="spec"><span>SLA</span><span class="spec-val">99.9% uptime</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing" style="background: var(--bg2); border-top: 1px solid var(--border);">
+  <div class="section-label">// pricing</div>
+  <div class="pricing-grid">
+    <div class="price-card fade-up">
+      <div class="price-tier">Spot / Hourly</div>
+      <div class="price-amount"><sup>$</sup>0.49</div>
+      <div class="price-period">per GPU-hour · no commitment</div>
+      <ul class="price-features">
+        <li>RTX 4090 24GB VRAM</li>
+        <li>Any model up to 70B Q4</li>
+        <li>OpenAI-compatible API endpoint</li>
+        <li>Pay-as-you-go in crypto</li>
+        <li>Spin up in &lt; 60 seconds</li>
+      </ul>
+      <a href="#waitlist" class="price-btn">Get Started</a>
+    </div>
+    <div class="price-card featured fade-up">
+      <div class="price-featured-badge">Most Popular</div>
+      <div class="price-tier">Monthly</div>
+      <div class="price-amount"><sup>$</sup>299</div>
+      <div class="price-period">per month · billed in crypto</div>
+      <ul class="price-features">
+        <li>A100 40GB or 2× RTX 4090</li>
+        <li>All models included</li>
+        <li>Priority inference queue</li>
+        <li>Custom model deployment</li>
+        <li>No logs, no monitoring</li>
+        <li>24/7 support</li>
+      </ul>
+      <a href="#waitlist" class="price-btn">Deploy Now</a>
+    </div>
+    <div class="price-card fade-up">
+      <div class="price-tier">Quarterly / Annual</div>
+      <div class="price-amount"><sup>$</sup>799</div>
+      <div class="price-period">per quarter · save 11%</div>
+      <ul class="price-features">
+        <li>H100 80GB SXM dedicated node</li>
+        <li>Fully isolated environment</li>
+        <li>All models + custom weights</li>
+        <li>White-glove onboarding</li>
+        <li>SLA 99.9% uptime guarantee</li>
+        <li>Annual: additional 15% off</li>
+      </ul>
+      <a href="#waitlist" class="price-btn">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- CRYPTO PAYMENT -->
+<section class="section" id="payment">
+  <div class="section-label">// accepted payment</div>
+  <p style="font-family: var(--mono); font-size: 13px; color: var(--muted); max-width: 560px; line-height: 1.8;">
+    We accept crypto and stablecoins only. No credit cards. No KYC. No accounts linked to your identity unless you choose otherwise.
+  </p>
+  <div class="crypto-grid">
+    <div class="crypto-badge">SOL</div>
+    <div class="crypto-badge">USDC</div>
+    <div class="crypto-badge">USDT</div>
+    <div class="crypto-badge">ETH</div>
+    <div class="crypto-badge">BTC</div>
+    <div class="crypto-badge">DAI</div>
+    <div class="crypto-badge">XMR</div>
+    <div class="crypto-badge">TIMER ⚡</div>
+  </div>
+
+  <div class="trust-grid">
+    <div class="trust-item fade-up">
+      <div class="trust-num">0</div>
+      <div class="trust-label">Logs Retained</div>
+    </div>
+    <div class="trust-item fade-up">
+      <div class="trust-num">24/7</div>
+      <div class="trust-label">Inference Uptime</div>
+    </div>
+    <div class="trust-item fade-up">
+      <div class="trust-num">&lt;60s</div>
+      <div class="trust-label">Deploy Time</div>
+    </div>
+    <div class="trust-item fade-up">
+      <div class="trust-num">∞</div>
+      <div class="trust-label">No Rate Limits</div>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section class="waitlist-section" id="waitlist">
+  <div class="waitlist-inner">
+    <div class="waitlist-title">GET <span>EARLY</span> ACCESS</div>
+    <p class="waitlist-sub">
+      Join the waitlist for priority access and founding member pricing.<br/>
+      Or book directly — first deployments are live now on select GPU nodes.
+    </p>
+    <form class="waitlist-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <input class="form-input" type="text" placeholder="Name or handle" required/>
+        <input class="form-input" type="email" placeholder="Email (optional)" />
+      </div>
+      <div class="form-row">
+        <input class="form-input" type="text" placeholder="Telegram / Discord handle"/>
+        <select class="form-select">
+          <option value="">— use case —</option>
+          <option>Research / Academia</option>
+          <option>AI Agent Development</option>
+          <option>Creative / Roleplay</option>
+          <option>Enterprise / Production</option>
+          <option>Personal / Exploration</option>
+        </select>
+      </div>
+      <select class="form-select">
+        <option value="">— preferred model —</option>
+        <option>LLaMA 4 Scout</option>
+        <option>Abliterated v2</option>
+        <option>Dolphin Mixtral 2.9</option>
+        <option>Dolphin Mixtral 2.7</option>
+        <option>Custom Deploy</option>
+        <option>Dedicated Node (H100)</option>
+      </select>
+      <select class="form-select">
+        <option value="">— billing preference —</option>
+        <option>Hourly (spot)</option>
+        <option>Monthly</option>
+        <option>Quarterly</option>
+        <option>Annual</option>
+      </select>
+      <input class="form-input" type="text" placeholder="Wallet address (SOL / ETH) for priority allocation"/>
+      <button type="submit" class="form-submit">→ Request Access</button>
+    </form>
+    <div id="form-success" style="display:none; font-family: var(--mono); font-size: 12px; color: var(--accent); margin-top: 16px;">
+      ✓ Received. We'll reach out within 24h.
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">uncensored<span>.codes</span></div>
+  <ul class="footer-links">
+    <li><a href="#models">Models</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#waitlist">Deploy</a></li>
+    <li><a href="mailto:hello@uncensored.codes">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 uncensored.codes — powered by decentralized GPU infrastructure</div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 4 + 'px';
+    cursor.style.top = my - 4 + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx - 16) * 0.12;
+    ry += (my - ry - 16) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Fade up on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  // Form
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('form-success').style.display = 'block';
+    e.target.style.opacity = '0.4';
+    e.target.style.pointerEvents = 'none';
+  }
+
+  // Typewriter for hero tag
+  const tag = document.querySelector('.hero-tag');
+  // Already rendered statically
+
+</script>
+</body>
+</html>
