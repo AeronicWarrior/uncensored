@@ -793,6 +793,7 @@
   <div class="nav-logo">uncensored<span>.codes</span></div>
   <ul class="nav-links">
     <li><a href="#models">Models</a></li>
+    <li><a href="#technology">ZK Privacy</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#payment">Pay Crypto</a></li>
     <li><a href="#waitlist">Early Access</a></li>
@@ -809,7 +810,8 @@
   </h1>
   <p class="hero-sub">
     <strong>Run Uncensored Unbiased AI Inference 24×7</strong><br/>
-    No filters. No guardrails. No logs.<br/>
+    No filters. No guardrails. No logs. <span style="color:var(--accent)">No visibility — not even ours.</span><br/>
+    Zero-Knowledge Private Inference · E2E Encrypted · TEE Isolated · ZK Attested.<br/>
     LLaMA 4 Scout · Abliterated v2 · Dolphin Mixtral · and more.<br/>
     Pay with your favorite cryptocurrency or stablecoin.
   </p>
@@ -824,6 +826,8 @@
 <div class="ticker">
   <div class="ticker-inner">
     <span class="ticker-item">Zero Censorship</span>
+    <span class="ticker-item">ZK Private Inference</span>
+    <span class="ticker-item">TEE Isolated</span>
     <span class="ticker-item">No KYC Required</span>
     <span class="ticker-item">Pay in Crypto</span>
     <span class="ticker-item">LLaMA 4 Scout</span>
@@ -832,6 +836,8 @@
     <span class="ticker-item">99.9% Uptime</span>
     <span class="ticker-item">Hourly Billing</span>
     <span class="ticker-item">Zero Censorship</span>
+    <span class="ticker-item">ZK Private Inference</span>
+    <span class="ticker-item">TEE Isolated</span>
     <span class="ticker-item">No KYC Required</span>
     <span class="ticker-item">Pay in Crypto</span>
     <span class="ticker-item">LLaMA 4 Scout</span>
@@ -915,42 +921,237 @@
   </div>
 </section>
 
+
+<!-- ZK DIFFERENTIATOR -->
+<section class="section" id="technology" style="background:var(--bg); border-top:1px solid var(--border);">
+  <div class="section-label">// why uncensored.codes</div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px; max-width:1100px; margin-bottom:64px;">
+    <div>
+      <div style="font-family:var(--display); font-size:clamp(36px,5vw,64px); line-height:0.95; color:var(--text); margin-bottom:24px;">
+        THE ONLY <span style="color:var(--accent)">ZERO-KNOWLEDGE</span> INFERENCE LAYER
+      </div>
+      <p style="font-family:var(--mono); font-size:12px; color:var(--muted); line-height:2;">
+        Every other GPU cloud can see your prompts. Your queries. Your data.<br/><br/>
+        We can't. Not because we promise — because <strong style="color:var(--text)">the architecture makes it mathematically impossible.</strong><br/><br/>
+        ZK-PI: Zero-Knowledge Private Inference. Your prompt never leaves your machine unencrypted. The GPU never sees plaintext. We never see anything.
+      </p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:16px; justify-content:center;">
+      <div style="font-family:var(--mono); font-size:10px; color:var(--muted); letter-spacing:0.1em; margin-bottom:8px;">// vs the competition</div>
+      <div class="compare-row">
+        <span class="compare-label">OpenAI / Anthropic</span>
+        <span class="compare-bad">✗ Logs everything · Filters everything · Owns your data</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-label">RunPod / Lambda</span>
+        <span class="compare-bad">✗ No encryption · Admin access to your GPU · Plaintext logs</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-label">Vast.ai / io.net</span>
+        <span class="compare-bad">✗ Untrusted hardware · No attestation · No privacy</span>
+      </div>
+      <div class="compare-row" style="border-color:var(--accent);">
+        <span class="compare-label" style="color:var(--accent)">uncensored.codes</span>
+        <span class="compare-good">✓ ZK inference · TEE isolation · Cryptographic attestation</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Architecture diagram -->
+  <div style="border:1px solid var(--border); background:var(--bg2); padding:40px; margin-bottom:48px;">
+    <div style="font-family:var(--mono); font-size:10px; color:var(--accent); letter-spacing:0.2em; text-transform:uppercase; margin-bottom:32px;">// ZK-PI architecture</div>
+    <div class="arch-flow">
+      <div class="arch-node client">
+        <div class="arch-icon">👤</div>
+        <div class="arch-title">Your Machine</div>
+        <div class="arch-desc">Prompt encrypted<br/>with your private key<br/>before leaving device</div>
+      </div>
+      <div class="arch-arrow">
+        <div class="arch-arrow-line"></div>
+        <div class="arch-arrow-label">E2E encrypted<br/>WebSocket</div>
+      </div>
+      <div class="arch-node tee">
+        <div class="arch-icon">🔐</div>
+        <div class="arch-title">TEE Enclave</div>
+        <div class="arch-desc">Intel TDX / AMD SEV<br/>Decrypts inside<br/>trusted execution env</div>
+      </div>
+      <div class="arch-arrow">
+        <div class="arch-arrow-line"></div>
+        <div class="arch-arrow-label">Isolated inference<br/>no host access</div>
+      </div>
+      <div class="arch-node gpu">
+        <div class="arch-icon">⚡</div>
+        <div class="arch-title">GPU Inference</div>
+        <div class="arch-desc">Model runs inside<br/>isolated environment<br/>Zero plaintext exposure</div>
+      </div>
+      <div class="arch-arrow">
+        <div class="arch-arrow-line"></div>
+        <div class="arch-arrow-label">ZK proof +<br/>encrypted response</div>
+      </div>
+      <div class="arch-node verify">
+        <div class="arch-icon">✓</div>
+        <div class="arch-title">ZK Attestation</div>
+        <div class="arch-desc">Cryptographic proof<br/>correct model ran<br/>Response verifiable</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature pillars -->
+  <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border);">
+    <div class="pillar-card">
+      <div class="pillar-icon">🔐</div>
+      <div class="pillar-title">End-to-End Encryption</div>
+      <div class="pillar-desc">Bidirectional encrypted WebSocket channel. Your session key. Your prompts. Your responses. Session keys rotated every 1M tokens.</div>
+      <div class="pillar-tag">Phase 1 — Live Q2 2026</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">🛡️</div>
+      <div class="pillar-title">TEE Isolation</div>
+      <div class="pillar-desc">Intel TDX and AMD SEV-SNP trusted execution environments. Not even the GPU host can access your inference session.</div>
+      <div class="pillar-tag">Phase 2 — Q3 2026</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">⚡</div>
+      <div class="pillar-title">ZK Proof of Inference</div>
+      <div class="pillar-desc">Cryptographic proof that the exact model you requested ran on your prompt. Verify without trusting us. Powered by RISC Zero / SP1.</div>
+      <div class="pillar-tag">Phase 3 — Q4 2026</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">🌐</div>
+      <div class="pillar-title">No Logs Architecture</div>
+      <div class="pillar-desc">Architectural impossibility of logging. Not a policy. Not a promise. The system physically cannot retain your inference data.</div>
+      <div class="pillar-tag">By Design — Always</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">🔗</div>
+      <div class="pillar-title">On-Chain Attestation</div>
+      <div class="pillar-desc">Every inference session produces an on-chain attestation record on Solana. Immutable proof of service delivery and model integrity.</div>
+      <div class="pillar-tag">Phase 3 — Q4 2026</div>
+    </div>
+    <div class="pillar-card">
+      <div class="pillar-icon">🤖</div>
+      <div class="pillar-title">Agentic AI Ready</div>
+      <div class="pillar-desc">Multi-step agent workflows with persistent encrypted context. Built for autonomous AI that processes sensitive data across long sessions.</div>
+      <div class="pillar-tag">Phase 2 — Q3 2026</div>
+    </div>
+  </div>
+
+  <!-- Enterprise CTA -->
+  <div style="margin-top:48px; border:1px solid rgba(0,255,136,0.2); padding:32px; background:rgba(0,255,136,0.02); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:24px;">
+    <div>
+      <div style="font-family:var(--display); font-size:32px; color:var(--text);">ENTERPRISE ZK INFERENCE</div>
+      <div style="font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:8px;">Custom TEE deployment · Dedicated H100 cluster · On-chain SLA · Starting $10k/mo</div>
+    </div>
+    <a href="mailto:enterprise@uncensored.codes" class="btn-primary" style="text-decoration:none;"><span>→ Talk to Us</span></a>
+  </div>
+</section>
+
+<style>
+.compare-row {
+  display: flex; gap: 16px; align-items: flex-start;
+  border: 1px solid var(--border); padding: 12px 16px;
+  font-family: var(--mono); font-size: 10px;
+}
+.compare-label { color: var(--text); min-width: 140px; flex-shrink: 0; }
+.compare-bad { color: var(--accent2); line-height: 1.6; }
+.compare-good { color: var(--accent); line-height: 1.6; }
+
+.arch-flow {
+  display: flex; align-items: center; gap: 0;
+  overflow-x: auto; padding-bottom: 8px;
+}
+.arch-node {
+  flex-shrink: 0; width: 140px; text-align: center; padding: 20px 12px;
+  border: 1px solid var(--border); background: var(--bg);
+}
+.arch-node.client { border-color: rgba(0,255,136,0.3); }
+.arch-node.tee { border-color: rgba(255,204,0,0.3); }
+.arch-node.gpu { border-color: rgba(255,51,102,0.3); }
+.arch-node.verify { border-color: rgba(0,255,136,0.5); }
+.arch-icon { font-size: 24px; margin-bottom: 8px; }
+.arch-title { font-family: var(--mono); font-size: 11px; color: var(--text); margin-bottom: 8px; font-weight: 700; }
+.arch-desc { font-family: var(--mono); font-size: 9px; color: var(--muted); line-height: 1.6; }
+.arch-arrow {
+  flex-shrink: 0; display: flex; flex-direction: column;
+  align-items: center; width: 80px; gap: 4px;
+}
+.arch-arrow-line {
+  width: 100%; height: 1px; background: var(--accent);
+  position: relative;
+}
+.arch-arrow-line::after {
+  content: '▶'; position: absolute; right: -6px; top: -7px;
+  color: var(--accent); font-size: 8px;
+}
+.arch-arrow-label {
+  font-family: var(--mono); font-size: 8px; color: var(--muted);
+  text-align: center; line-height: 1.4;
+}
+
+.pillar-card {
+  background: var(--bg2); padding: 28px; transition: background 0.2s;
+}
+.pillar-card:hover { background: var(--bg3); }
+.pillar-icon { font-size: 24px; margin-bottom: 12px; }
+.pillar-title { font-family: var(--mono); font-size: 12px; color: var(--text); margin-bottom: 10px; font-weight: 700; letter-spacing: 0.05em; }
+.pillar-desc { font-family: var(--mono); font-size: 10px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+.pillar-tag { font-family: var(--mono); font-size: 9px; color: var(--accent); letter-spacing: 0.1em; border-top: 1px solid var(--border); padding-top: 10px; }
+
+@media (max-width: 768px) {
+  .arch-flow { flex-direction: column; }
+  .arch-arrow { width: 60px; transform: rotate(90deg); margin: 8px 0; }
+}
+</style>
+
 <!-- PRICING -->
 <section class="section" id="pricing" style="background: var(--bg2); border-top: 1px solid var(--border);">
   <div class="section-label">// pricing</div>
   <div class="pricing-grid">
     <div class="price-card fade-up">
       <div class="price-tier">Spot / Hourly</div>
-      <div class="price-amount"><sup>$</sup>0.49</div>
-      <div class="price-period">per GPU-hour · no commitment</div>
+      <div class="price-amount"><sup>$</sup>0.89</div>
+      <div class="price-period">per GPU-hour · RTX 4090 · no commitment</div>
       <ul class="price-features">
         <li>RTX 4090 24GB VRAM</li>
         <li>Any model up to 70B Q4</li>
         <li>OpenAI-compatible API endpoint</li>
         <li>Pay-as-you-go in crypto</li>
         <li>Spin up in &lt; 60 seconds</li>
+        <li>A100 40GB available at $2.49/hr</li>
       </ul>
-      <a href="#waitlist" class="price-btn">Get Started</a>
+      <a href="#waitlist" class="price-btn">Get Started →</a>
+      <div style="margin-top:12px;">
+        <a href="https://nowpayments.io/payment/?iid=4439897724&source=button" target="_blank" rel="noreferrer noopener" style="display:inline-block;">
+          <img src="https://nowpayments.io/images/embeds/payment-button-black.svg" alt="Pay with crypto" style="height:40px;"/>
+        </a>
+      </div>
     </div>
     <div class="price-card featured fade-up">
       <div class="price-featured-badge">Most Popular</div>
       <div class="price-tier">Monthly</div>
-      <div class="price-amount"><sup>$</sup>299</div>
-      <div class="price-period">per month · billed in crypto</div>
+      <div class="price-amount"><sup>$</sup>899</div>
+      <div class="price-period">per month · 2x RTX 4090 · billed in crypto</div>
       <ul class="price-features">
-        <li>A100 40GB or 2× RTX 4090</li>
+        <li>2x RTX 4090 48GB total VRAM</li>
         <li>All models included</li>
         <li>Priority inference queue</li>
         <li>Custom model deployment</li>
         <li>No logs, no monitoring</li>
         <li>24/7 support</li>
+        <li>A100 40GB at $1,799/mo</li>
       </ul>
-      <a href="#waitlist" class="price-btn">Deploy Now</a>
+      <a href="#waitlist" class="price-btn">Deploy Now →</a>
+      <div style="margin-top:12px;">
+        <a href="https://nowpayments.io/payment/?iid=4758393811&source=button" target="_blank" rel="noreferrer noopener" style="display:inline-block;">
+          <img src="https://nowpayments.io/images/embeds/payment-button-black.svg" alt="Pay with crypto" style="height:40px;"/>
+        </a>
+      </div>
     </div>
     <div class="price-card fade-up">
       <div class="price-tier">Quarterly / Annual</div>
-      <div class="price-amount"><sup>$</sup>799</div>
-      <div class="price-period">per quarter · save 11%</div>
+      <div class="price-amount"><sup>$</sup>2,999</div>
+      <div class="price-period">per month · H100 80GB · billed quarterly</div>
       <ul class="price-features">
         <li>H100 80GB SXM dedicated node</li>
         <li>Fully isolated environment</li>
@@ -959,29 +1160,98 @@
         <li>SLA 99.9% uptime guarantee</li>
         <li>Annual: additional 15% off</li>
       </ul>
-      <a href="#waitlist" class="price-btn">Contact Us</a>
+      <a href="#waitlist" class="price-btn">Contact Us →</a>
+      <div style="margin-top:12px;">
+        <a href="https://nowpayments.io/payment/?iid=5986599962&source=button" target="_blank" rel="noreferrer noopener" style="display:inline-block;">
+          <img src="https://nowpayments.io/images/embeds/payment-button-black.svg" alt="Pay with crypto" style="height:40px;"/>
+        </a>
+      </div>
     </div>
   </div>
+  <p style="font-family:var(--mono); font-size:10px; color:var(--muted); margin-top:16px;">
+    * Hourly billing available for all GPU tiers. Monthly/quarterly rates reflect reserved capacity with guaranteed availability. Pay in SOL, USDT, USDC, BTC or XMR.
+  </p>
 </section>
 
 <!-- CRYPTO PAYMENT -->
 <section class="section" id="payment">
-  <div class="section-label">// accepted payment</div>
+  <div class="section-label">// pay with crypto</div>
   <p style="font-family: var(--mono); font-size: 13px; color: var(--muted); max-width: 560px; line-height: 1.8;">
-    We accept crypto and stablecoins only. No credit cards. No KYC. No accounts linked to your identity unless you choose otherwise.
+    Crypto and stablecoins only. No credit cards. No KYC. No identity unless you choose otherwise. Powered by <strong style="color:var(--text)">NOWPayments</strong>, <strong style="color:var(--text)">Solana Pay</strong> and <strong style="color:var(--text)">BTCPay Server</strong>.
   </p>
-  <div class="crypto-grid">
-    <div class="crypto-badge">SOL</div>
-    <div class="crypto-badge">USDC</div>
-    <div class="crypto-badge">USDT</div>
-    <div class="crypto-badge">ETH</div>
-    <div class="crypto-badge">BTC</div>
-    <div class="crypto-badge">DAI</div>
-    <div class="crypto-badge">XMR</div>
-    <div class="crypto-badge">TIMER ⚡</div>
+
+  <!-- Payment method tabs -->
+  <div style="display:flex; gap:8px; margin-top:32px; flex-wrap:wrap;">
+    <button class="pay-tab active" onclick="showPayTab('solana')">⚡ Solana Pay</button>
+    <button class="pay-tab" onclick="showPayTab('nowpayments')">🌐 NOWPayments</button>
+    <button class="pay-tab" onclick="showPayTab('btcpay')">₿ BTCPay</button>
   </div>
 
-  <div class="trust-grid">
+  <!-- Solana Pay -->
+  <div class="pay-panel active" id="panel-solana">
+    <div class="pay-card">
+      <div class="pay-card-title">Solana Pay — Instant, Zero Fees</div>
+      <p class="pay-card-desc">Send SOL, USDC, or TIMER directly to our wallet. Confirmed in &lt;1 second. No intermediary.</p>
+      <div class="pay-address-box">
+        <span class="pay-label">SOL / USDC / TIMER wallet</span>
+        <div class="pay-address" id="sol-address">2Kasabzr99M6v9bSaqmf7znH5KKfs5uT5XacTzbvu23b</div>
+        <button class="btn-copy" onclick="copyAddr('sol-address', this)">Copy</button>
+      </div>
+      <div class="pay-steps">
+        <div class="pay-step"><span class="step-num">01</span>Open Phantom / Solflare</div>
+        <div class="pay-step"><span class="step-num">02</span>Send SOL/USDC/TIMER to address above</div>
+        <div class="pay-step"><span class="step-num">03</span>DM us your TX hash on Telegram/Discord</div>
+        <div class="pay-step"><span class="step-num">04</span>GPU spun up within 60 seconds</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOWPayments -->
+  <div class="pay-panel" id="panel-nowpayments">
+    <div class="pay-card">
+      <div class="pay-card-title">NOWPayments — 300+ Coins Accepted</div>
+      <p class="pay-card-desc">Pay with BTC, ETH, XMR, LTC, DOGE, and 300+ other cryptocurrencies. Auto-converted, instant confirmation.</p>
+      <div class="crypto-grid" style="margin-top:16px;">
+        <div class="crypto-badge">BTC</div>
+        <div class="crypto-badge">ETH</div>
+        <div class="crypto-badge">XMR</div>
+        <div class="crypto-badge">LTC</div>
+        <div class="crypto-badge">DOGE</div>
+        <div class="crypto-badge">MATIC</div>
+        <div class="crypto-badge">BNB</div>
+        <div class="crypto-badge">DAI</div>
+        <div class="crypto-badge">USDT (ERC20)</div>
+        <div class="crypto-badge">300+ more</div>
+      </div>
+      <div class="pay-steps" style="margin-top:24px;">
+        <div class="pay-step"><span class="step-num">01</span>Click "Pay Now" on your invoice</div>
+        <div class="pay-step"><span class="step-num">02</span>Select your preferred coin</div>
+        <div class="pay-step"><span class="step-num">03</span>Send exact amount to generated address</div>
+        <div class="pay-step"><span class="step-num">04</span>Auto-confirmed, GPU deployed</div>
+      </div>
+      <a href="#waitlist" class="btn-primary" style="display:inline-block; margin-top:24px;"><span>→ Get Invoice</span></a>
+    </div>
+  </div>
+
+  <!-- BTCPay -->
+  <div class="pay-panel" id="panel-btcpay">
+    <div class="pay-card">
+      <div class="pay-card-title">BTCPay Server — Self-Custody Bitcoin</div>
+      <p class="pay-card-desc">Pay with Bitcoin or Lightning Network. No third party. Funds go directly to our cold wallet. Zero custodial risk.</p>
+      <div class="pay-steps" style="margin-top:16px;">
+        <div class="pay-step"><span class="step-num">01</span>Click "Pay with Bitcoin" on checkout</div>
+        <div class="pay-step"><span class="step-num">02</span>Scan QR with any Bitcoin wallet</div>
+        <div class="pay-step"><span class="step-num">03</span>Or use Lightning for instant zero-fee payment</div>
+        <div class="pay-step"><span class="step-num">04</span>Confirmed on-chain → GPU deployed</div>
+      </div>
+      <div style="margin-top:24px; font-family:var(--mono); font-size:11px; color:var(--muted); border:1px solid var(--border); padding:16px;">
+        ⚡ Lightning payments confirm in &lt;3 seconds with fees under $0.001.<br/>
+        🔒 BTCPay Server is self-hosted — no Stripe, no Coinbase, no surveillance.
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-grid" style="margin-top:48px;">
     <div class="trust-item fade-up">
       <div class="trust-num">0</div>
       <div class="trust-label">Logs Retained</div>
@@ -1001,22 +1271,64 @@
   </div>
 </section>
 
+<!-- REFERRAL / VIRAL -->
+<section class="section" id="referral" style="background:var(--bg2); border-top:1px solid var(--border);">
+  <div class="section-label">// refer &amp; earn</div>
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border);">
+    <div style="background:var(--bg); padding:32px;">
+      <div style="font-family:var(--display); font-size:48px; color:var(--accent); line-height:1;">1 FREE</div>
+      <div style="font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:8px;">GPU-hour for every 3 referrals who sign up</div>
+    </div>
+    <div style="background:var(--bg); padding:32px;">
+      <div style="font-family:var(--display); font-size:48px; color:var(--accent3); line-height:1;">10%</div>
+      <div style="font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:8px;">lifetime revenue share on every paying referral</div>
+    </div>
+    <div style="background:var(--bg); padding:32px;">
+      <div style="font-family:var(--display); font-size:48px; color:var(--accent2); line-height:1;">∞</div>
+      <div style="font-family:var(--mono); font-size:11px; color:var(--muted); margin-top:8px;">no cap on referral earnings — paid in USDC or TIMER</div>
+    </div>
+  </div>
+  <div style="margin-top:24px; font-family:var(--mono); font-size:12px; color:var(--muted); line-height:1.8;">
+    Share your referral link after signing up. Track conversions in your dashboard. Paid out monthly.
+  </div>
+
+  <!-- Community links -->
+  <div style="margin-top:40px;">
+    <div class="section-label">// join the community</div>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:16px;">
+      <a href="https://discord.gg/Gp3vFdxE" target="_blank" class="community-btn">Discord Server →</a>
+      <a href="https://t.me/" target="_blank" class="community-btn">Telegram Channel →</a>
+      <a href="https://twitter.com/uncensoredcodes" target="_blank" class="community-btn">Twitter/X →</a>
+      <a href="https://reddit.com/r/LocalLLaMA" target="_blank" class="community-btn" style="color:var(--accent3); border-color:var(--accent3);">r/LocalLLaMA →</a>
+      <a href="https://news.ycombinator.com/" target="_blank" class="community-btn" style="color:var(--accent2); border-color:var(--accent2);">Hacker News →</a>
+    </div>
+  </div>
+</section>
+
 <!-- WAITLIST -->
 <section class="waitlist-section" id="waitlist">
   <div class="waitlist-inner">
     <div class="waitlist-title">GET <span>EARLY</span> ACCESS</div>
     <p class="waitlist-sub">
       Join the waitlist for priority access and founding member pricing.<br/>
-      Or book directly — first deployments are live now on select GPU nodes.
+      Or book directly — first deployments are live now on select GPU nodes.<br/>
+      <strong style="color:var(--accent)">Founding members get 20% off forever.</strong>
     </p>
+
+    <!-- Referral counter -->
+    <div id="signup-counter" style="font-family:var(--mono); font-size:11px; color:var(--accent); margin-bottom:24px; display:flex; align-items:center; gap:8px;">
+      <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--accent); animation:pulse 2s infinite;"></span>
+      <span id="counter-num">47</span> people on the waitlist — <span id="spots-left">3 founding spots left</span>
+    </div>
+
     <form class="waitlist-form" onsubmit="handleSubmit(event)">
       <div class="form-row">
-        <input class="form-input" type="text" placeholder="Name or handle" required/>
-        <input class="form-input" type="email" placeholder="Email (optional)" />
+        <input class="form-input" type="text" id="f-handle" placeholder="Name or handle" required/>
+        <input class="form-input" type="email" id="f-email" placeholder="Email (for updates)"/>
       </div>
       <div class="form-row">
-        <input class="form-input" type="text" placeholder="Telegram / Discord handle"/>
-        <select class="form-select">
+        <input class="form-input" type="text" id="f-telegram" placeholder="Telegram / Discord handle"/>
+        <select class="form-select" id="f-usecase">
           <option value="">— use case —</option>
           <option>Research / Academia</option>
           <option>AI Agent Development</option>
@@ -1025,27 +1337,50 @@
           <option>Personal / Exploration</option>
         </select>
       </div>
-      <select class="form-select">
-        <option value="">— preferred model —</option>
-        <option>LLaMA 4 Scout</option>
-        <option>Abliterated v2</option>
-        <option>Dolphin Mixtral 2.9</option>
-        <option>Dolphin Mixtral 2.7</option>
-        <option>Custom Deploy</option>
-        <option>Dedicated Node (H100)</option>
-      </select>
-      <select class="form-select">
-        <option value="">— billing preference —</option>
-        <option>Hourly (spot)</option>
-        <option>Monthly</option>
-        <option>Quarterly</option>
-        <option>Annual</option>
-      </select>
-      <input class="form-input" type="text" placeholder="Wallet address (SOL / ETH) for priority allocation"/>
-      <button type="submit" class="form-submit">→ Request Access</button>
+      <div class="form-row">
+        <select class="form-select" id="f-model">
+          <option value="">— preferred model —</option>
+          <option>LLaMA 4 Scout</option>
+          <option>Abliterated v2</option>
+          <option>Dolphin Mixtral 2.9</option>
+          <option>Dolphin Mixtral 2.7</option>
+          <option>Custom Deploy</option>
+          <option>Dedicated Node (H100)</option>
+        </select>
+        <select class="form-select" id="f-billing">
+          <option value="">— billing preference —</option>
+          <option>Hourly (spot)</option>
+          <option>Monthly</option>
+          <option>Quarterly</option>
+          <option>Annual</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <select class="form-select" id="f-crypto">
+          <option value="">— preferred payment —</option>
+          <option>SOL</option>
+          <option>USDC (Solana)</option>
+          <option>TIMER</option>
+          <option>BTC / Lightning</option>
+          <option>ETH</option>
+          <option>XMR</option>
+          <option>Other crypto</option>
+        </select>
+        <input class="form-input" type="text" id="f-wallet" placeholder="Wallet address (optional, for priority)"/>
+      </div>
+      <input class="form-input" type="text" id="f-ref" placeholder="Referral code (if you have one)"/>
+      <button type="submit" class="form-submit">→ Secure My Spot</button>
     </form>
-    <div id="form-success" style="display:none; font-family: var(--mono); font-size: 12px; color: var(--accent); margin-top: 16px;">
-      ✓ Received. We'll reach out within 24h.
+    <div id="form-success" style="display:none; font-family:var(--mono); font-size:12px; color:var(--accent); margin-top:16px; line-height:2;">
+      ✓ You're on the list! We'll reach out within 24h.<br/>
+      <span style="color:var(--muted);">Share your referral link to earn free GPU hours:</span><br/>
+      <span id="referral-link" style="color:var(--accent3); word-break:break-all;"></span>
+      <button onclick="copyReferral()" style="background:none; border:1px solid var(--accent3); color:var(--accent3); font-family:var(--mono); font-size:10px; padding:4px 12px; cursor:pointer; margin-left:8px;">Copy</button>
+    </div>
+
+    <!-- Airtable embed placeholder -->
+    <div style="margin-top:32px; font-family:var(--mono); font-size:10px; color:var(--muted); border-top:1px solid var(--border); padding-top:16px;">
+      🔒 Your data is stored securely. We never sell or share it. Unsubscribe anytime.
     </div>
   </div>
 </section>
@@ -1056,11 +1391,78 @@
   <ul class="footer-links">
     <li><a href="#models">Models</a></li>
     <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#payment">Pay Crypto</a></li>
+    <li><a href="#referral">Refer &amp; Earn</a></li>
     <li><a href="#waitlist">Deploy</a></li>
     <li><a href="mailto:hello@uncensored.codes">Contact</a></li>
   </ul>
   <div class="footer-copy">© 2026 uncensored.codes — powered by decentralized GPU infrastructure</div>
 </footer>
+
+<style>
+/* Payment tabs */
+.pay-tab {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 10px 20px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--muted); cursor: none; transition: all 0.2s;
+}
+.pay-tab:hover, .pay-tab.active {
+  border-color: var(--accent); color: var(--accent);
+  background: rgba(0,255,136,0.05);
+}
+.pay-panel { display: none; margin-top: 24px; }
+.pay-panel.active { display: block; }
+.pay-card {
+  border: 1px solid var(--border); padding: 32px;
+  background: var(--bg2); max-width: 640px;
+}
+.pay-card-title {
+  font-family: var(--mono); font-size: 13px; color: var(--accent);
+  letter-spacing: 0.05em; margin-bottom: 12px;
+}
+.pay-card-desc {
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+  line-height: 1.8; margin-bottom: 16px;
+}
+.pay-address-box {
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 16px; margin: 16px 0; position: relative;
+}
+.pay-label {
+  font-family: var(--mono); font-size: 9px; color: var(--muted);
+  letter-spacing: 0.2em; text-transform: uppercase; display: block; margin-bottom: 8px;
+}
+.pay-address {
+  font-family: var(--mono); font-size: 11px; color: var(--accent);
+  word-break: break-all; line-height: 1.6;
+}
+.btn-copy {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); background: transparent;
+  border: 1px solid var(--border); padding: 4px 12px; cursor: pointer;
+  margin-top: 8px; display: inline-block; transition: all 0.2s;
+}
+.btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+.pay-steps {
+  display: flex; flex-direction: column; gap: 8px; margin-top: 16px;
+}
+.pay-step {
+  font-family: var(--mono); font-size: 11px; color: var(--muted);
+  display: flex; align-items: center; gap: 12px;
+}
+.step-num {
+  color: var(--accent); font-size: 9px; letter-spacing: 0.1em; flex-shrink: 0;
+}
+/* Community buttons */
+.community-btn {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+  color: var(--accent); border: 1px solid rgba(0,255,136,0.3);
+  padding: 10px 20px; text-decoration: none; transition: all 0.2s;
+  display: inline-block;
+}
+.community-btn:hover { background: rgba(0,255,136,0.05); border-color: var(--accent); }
+</style>
 
 <script>
   // Cursor
@@ -1087,21 +1489,89 @@
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
-
   document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 
-  // Form
+  // Payment tabs
+  function showPayTab(tab) {
+    document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.pay-panel').forEach(p => p.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('panel-' + tab).classList.add('active');
+  }
+
+  // Copy address
+  function copyAddr(id, btn) {
+    navigator.clipboard.writeText(document.getElementById(id).textContent.trim());
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  }
+
+  // Animated counter
+  let count = 47;
+  setInterval(() => {
+    if (Math.random() > 0.7) {
+      count++;
+      document.getElementById('counter-num').textContent = count;
+      const spots = Math.max(0, 50 - count);
+      document.getElementById('spots-left').textContent = spots > 0 ? spots + ' founding spots left' : 'founding spots full — standard pricing applies';
+    }
+  }, 8000);
+
+  // Form submit + referral link generation
   function handleSubmit(e) {
     e.preventDefault();
+    const handle = document.getElementById('f-handle').value || 'user';
+    const refCode = Math.random().toString(36).substr(2, 8).toUpperCase();
+    const refLink = `https://uncensored.codes/?ref=${refCode}`;
+
+    // Send to Airtable (replace with your base ID + API key)
+    const AIRTABLE_BASE = 'YOUR_BASE_ID';
+    const AIRTABLE_KEY = 'YOUR_API_KEY';
+    const payload = {
+      fields: {
+        Handle: handle,
+        Email: document.getElementById('f-email').value,
+        Telegram: document.getElementById('f-telegram').value,
+        UseCase: document.getElementById('f-usecase').value,
+        Model: document.getElementById('f-model').value,
+        Billing: document.getElementById('f-billing').value,
+        Crypto: document.getElementById('f-crypto').value,
+        Wallet: document.getElementById('f-wallet').value,
+        ReferralCode: refCode,
+        ReferredBy: document.getElementById('f-ref').value,
+        Source: new URLSearchParams(window.location.search).get('ref') || 'direct',
+      }
+    };
+
+    // Fire and forget to Airtable
+    if (AIRTABLE_BASE !== 'YOUR_BASE_ID') {
+      fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE}/Leads`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${AIRTABLE_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(() => {});
+    }
+
+    document.getElementById('referral-link').textContent = refLink;
     document.getElementById('form-success').style.display = 'block';
     e.target.style.opacity = '0.4';
     e.target.style.pointerEvents = 'none';
+    count++;
+    document.getElementById('counter-num').textContent = count;
   }
 
-  // Typewriter for hero tag
-  const tag = document.querySelector('.hero-tag');
-  // Already rendered statically
+  function copyReferral() {
+    const link = document.getElementById('referral-link').textContent;
+    navigator.clipboard.writeText(link);
+    event.target.textContent = 'Copied!';
+    setTimeout(() => event.target.textContent = 'Copy', 2000);
+  }
 
+  // Auto-detect referral code from URL
+  const refParam = new URLSearchParams(window.location.search).get('ref');
+  if (refParam) {
+    document.getElementById('f-ref').value = refParam;
+  }
 </script>
 </body>
 </html>
