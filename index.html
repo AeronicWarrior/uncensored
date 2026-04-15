@@ -1524,33 +1524,29 @@
     const refCode = Math.random().toString(36).substr(2, 8).toUpperCase();
     const refLink = `https://uncensored.codes/?ref=${refCode}`;
 
-    // Send to Airtable (replace with your base ID + API key)
-    const AIRTABLE_BASE = 'YOUR_BASE_ID';
-    const AIRTABLE_KEY = 'YOUR_API_KEY';
+    // Send to Airtable
+    const AIRTABLE_BASE = 'appvmkIoD93YrldBc';
+    const AIRTABLE_KEY = 'patC66AA7xaAI7pWH.30fb4300e28897ee60af36ef59f3a894a07141ce62fb70f4e5756f7c4d4f32ba'; // ← paste your PAT token here
     const payload = {
       fields: {
-        Handle: handle,
-        Email: document.getElementById('f-email').value,
-        Telegram: document.getElementById('f-telegram').value,
-        UseCase: document.getElementById('f-usecase').value,
-        Model: document.getElementById('f-model').value,
-        Billing: document.getElementById('f-billing').value,
-        Crypto: document.getElementById('f-crypto').value,
-        Wallet: document.getElementById('f-wallet').value,
-        ReferralCode: refCode,
-        ReferredBy: document.getElementById('f-ref').value,
-        Source: new URLSearchParams(window.location.search).get('ref') || 'direct',
+        'Name': handle,
+        'Email': document.getElementById('f-email').value,
+        'Telegram/Discord': document.getElementById('f-telegram').value,
+        'Use Case': document.getElementById('f-usecase').value,
+        'Preferred Model': document.getElementById('f-model').value,
+        'Billing Preference': document.getElementById('f-billing').value,
+        'Preferred Payment': document.getElementById('f-crypto').value,
+        'Wallet Address': document.getElementById('f-wallet').value,
+        'Referral Code': refCode,
       }
     };
 
     // Fire and forget to Airtable
-    if (AIRTABLE_BASE !== 'YOUR_BASE_ID') {
-      fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE}/Leads`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${AIRTABLE_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }).catch(() => {});
-    }
+    fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE}/Early%20Access%20Leads`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${AIRTABLE_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
 
     document.getElementById('referral-link').textContent = refLink;
     document.getElementById('form-success').style.display = 'block';
